@@ -3,6 +3,7 @@ package it.polito.tdp.extflightdelays;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.extflightdelays.model.Airport;
 import it.polito.tdp.extflightdelays.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -28,10 +29,10 @@ public class FXMLController {
     private TextField compagnieMinimo; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbBoxAeroportoPartenza"
-    private ComboBox<?> cmbBoxAeroportoPartenza; // Value injected by FXMLLoader
+    private ComboBox<Airport> cmbBoxAeroportoPartenza; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbBoxAeroportoDestinazione"
-    private ComboBox<?> cmbBoxAeroportoDestinazione; // Value injected by FXMLLoader
+    private ComboBox<Airport> cmbBoxAeroportoDestinazione; // Value injected by FXMLLoader
 
     @FXML // fx:id="btnAnalizza"
     private Button btnAnalizza; // Value injected by FXMLLoader
@@ -41,7 +42,20 @@ public class FXMLController {
 
     @FXML
     void doAnalizzaAeroporti(ActionEvent event) {
-
+    	int minCompagnie;
+    	try {
+			minCompagnie = Integer.parseInt(compagnieMinimo.getText());
+		} catch (NumberFormatException e) {
+			txtResult.setText("Inserisci un numero");
+			return;
+		}
+    	
+    	this.model.creaGrafo(minCompagnie);
+    	
+    	cmbBoxAeroportoPartenza.getItems().addAll(model.getVertici());
+    	cmbBoxAeroportoDestinazione.getItems().addAll(model.getVertici());
+    	
+    	// ComboBox sono da riempire solo a questo punto perché i loro elementi li prendo dal grafo creato
     }
 
     @FXML
